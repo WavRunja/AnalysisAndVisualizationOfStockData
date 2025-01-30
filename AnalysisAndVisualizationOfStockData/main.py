@@ -1,6 +1,7 @@
 import data_download as dd
 import data_plotting as dplt
 from additional_functions import calculate_and_display_average_price as calc_price
+from additional_functions import notify_if_strong_fluctuations
 
 
 def main():
@@ -24,6 +25,15 @@ def main():
     if average_price is None:
         print("Не удалось построить график, так как данные не содержат колонку 'Close'.")
         return
+
+    # Notify about strong fluctuations
+    try:
+        threshold = float(input("Введите порог колебаний в процентах для уведомления (например, 5): "))
+    except ValueError:
+        print("Ошибка: Порог колебаний должен быть числом.")
+        return
+
+    notify_if_strong_fluctuations(stock_data, threshold)
 
     # Plotting a chart with the addition of the average price
     dplt.create_and_save_plot(stock_data, ticker, period, average_price=average_price)
